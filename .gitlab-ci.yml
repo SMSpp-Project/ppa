@@ -19,7 +19,7 @@ build_source:
   before_script:
     - apt-get update -qq
     - apt-get install -y --no-install-recommends
-        devscripts dput dpkg-dev python3 curl ca-certificates gnupg lsb-release
+        debhelper devscripts dput dpkg-dev python3 curl ca-certificates gnupg lsb-release
     - if [ -n "$PPA_GPG_KEY" ]; then gpg --batch --import "$PPA_GPG_KEY"; fi
   script:
     - if [ -n "$PPA_GPG_KEY" ]; then upload=--upload; else upload=; fi
