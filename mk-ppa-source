@@ -44,7 +44,10 @@ fi
 # Launchpad takes the identity of the uploader from the signature of the
 # source package: without a key the package is still built, unsigned, and
 # only an upload by hand of a signed one will do
+# dpkg-buildpackage would look for the key of the Changed-By of the changelog:
+# SMSPP_SIGN_KEY names the one to sign with, which is what the CI has
 sign=()
+[ -n "${SMSPP_SIGN_KEY:-}" ] && sign=(-k"$SMSPP_SIGN_KEY")
 if ! gpg --list-secret-keys >/dev/null 2>&1 ||
    [ -z "$(gpg --list-secret-keys --with-colons 2>/dev/null | grep '^sec')" ]; then
     sign=(-us -uc)
