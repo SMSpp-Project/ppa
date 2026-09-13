@@ -18,7 +18,7 @@ set -euo pipefail
 # second component, at the commit the other packages of the project pin too
 FASTFLOW_COMMIT=d476f66ab924d8d122f54b4b90aee00ef979aea8
 REGISTRY=https://gitlab.com/api/v4/projects/smspp%2Fsmspp-project/packages/generic/smspp-project
-PPA=${SMSPP_PPA:-ppa:dmeoli/smspp}
+PPA=${SMSPP_PPA:-ppa:smspp/ppa}
 REVISION=${SMSPP_REVISION:-1}
 
 here=$(cd "$(dirname "$0")" && pwd)

@@ -1,11 +1,11 @@
 # Debian packaging of SMS++
 
 The source package of the [SMS++ umbrella](https://gitlab.com/smspp/smspp-project)
-for the [PPA](https://launchpad.net/~dmeoli/+archive/ubuntu/smspp), out of
+for the [PPA](https://launchpad.net/~smspp/+archive/ubuntu/ppa), out of
 which Launchpad builds one library package per module, one command package per
 tool and the `smspp-project` metapackage of them all:
 
-    sudo add-apt-repository ppa:dmeoli/smspp
+    sudo add-apt-repository ppa:smspp/ppa
     sudo apt install smspp-project     # everything
     sudo apt install smspp-ucblock     # the Unit Commitment tool alone
     sudo apt install libsmspp-mcf-dev  # the headers of the MCFBlock module
