@@ -41,11 +41,14 @@ override_dh_auto_configure:
 
 # the one build of the umbrella is installed one module at a time, each in
 # its -dev package, out of which the shared library then moves to the
-# library package; the tools are installed one at a time as well
+# library package; the tools are installed one at a time as well. The install
+# goes through DESTDIR and not through --prefix, since the link that carries
+# the old name of a tool is made of the prefix of the configure
 override_dh_auto_install:
 	set -e; grep -v '^#' debian/modules.tsv | \
 	while read -r dir lib dev extra; do \
-		cmake --install $(BUILDDIR)/$$dir --prefix $(CURDIR)/debian/$$dev/usr; \
+		DESTDIR=$(CURDIR)/debian/$$dev \
+			cmake --install $(BUILDDIR)/$$dir; \
 		libdir=usr/lib/$(DEB_HOST_MULTIARCH); \
 		for pair in $$extra; do \
 			mkdir -p debian/$${pair%%=*}/$$libdir; \
@@ -57,8 +60,8 @@ override_dh_auto_install:
 	done
 	set -e; grep -v '^#' debian/tools.tsv | while read -r dirs pkg; do \
 		for dir in $$(echo $$dirs | tr ',' ' '); do \
-			cmake --install $(BUILDDIR)/tools/$$dir \
-				--prefix $(CURDIR)/debian/$$pkg/usr; \
+			DESTDIR=$(CURDIR)/debian/$$pkg \
+				cmake --install $(BUILDDIR)/tools/$$dir; \
 		done; \
 	done
 	set -e; grep -v '^#' debian/helpers.tsv | \
