@@ -7,6 +7,11 @@
 # protected and masked): without it the job only builds the source package
 # and keeps it as an artifact, for an upload by hand.
 
+# a push without a version would make a pipeline with nothing in it
+workflow:
+  rules:
+    - if: $SMSPP_VERSION
+
 variables:
   SMSPP_SERIES: resolute
 
@@ -37,8 +42,7 @@ build_source:
   script:
     # the key of the CI does not carry the name of the maintainer, so the
     # signature is told which one to use
-    - export SMSPP_SIGN_KEY=$(gpg --list-secret-keys --with-colons
-        | awk -F: '/^fpr/{print $10; exit}')
+    - "export SMSPP_SIGN_KEY=$(gpg --list-secret-keys --with-colons | grep -m1 ^fpr | cut -d: -f10)"
     - if [ -n "$PPA_GPG_KEY" ]; then upload=--upload; else upload=; fi
     - ./mk-ppa-source "$SMSPP_VERSION" $SMSPP_SERIES $upload
   artifacts:
