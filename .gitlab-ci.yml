@@ -20,6 +20,12 @@ build_source:
     - apt-get update -qq
     - apt-get install -y --no-install-recommends
         debhelper devscripts dput dpkg-dev python3 curl ca-certificates gnupg lsb-release
+    # gpg has no terminal here, and its agent would look for one: the key
+    # carries no passphrase, so the loopback spares the whole dance
+    - mkdir -p ~/.gnupg && chmod 700 ~/.gnupg
+    - printf 'pinentry-mode loopback\nno-tty\nbatch\n' > ~/.gnupg/gpg.conf
+    - printf 'allow-loopback-pinentry\n' > ~/.gnupg/gpg-agent.conf
+    - gpgconf --kill gpg-agent || true
     - if [ -n "$PPA_GPG_KEY" ]; then gpg --batch --import "$PPA_GPG_KEY"; fi
   script:
     - if [ -n "$PPA_GPG_KEY" ]; then upload=--upload; else upload=; fi
