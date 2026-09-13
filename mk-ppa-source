@@ -20,6 +20,9 @@ FASTFLOW_COMMIT=d476f66ab924d8d122f54b4b90aee00ef979aea8
 REGISTRY=https://gitlab.com/api/v4/projects/smspp%2Fsmspp-project/packages/generic/smspp-project
 PPA=${SMSPP_PPA:-ppa:smspp/ppa}
 REVISION=${SMSPP_REVISION:-1}
+# a second upload of the same revision to the PPA only bumps this, and then
+# the orig tarballs stay out of the upload, the archive has them already
+PPA_BUILD=${SMSPP_PPA_BUILD:-1}
 
 here=$(cd "$(dirname "$0")" && pwd)
 version=""
@@ -84,14 +87,15 @@ for s in "${series[@]}"; do
     DEBEMAIL=${DEBEMAIL:-donato.meoli.95@gmail.com} \
     DEBFULLNAME=${DEBFULLNAME:-Donato Meoli} \
     dch --create --package smspp-project --newversion \
-        "$version-$REVISION~$s$REVISION" --distribution "$s" \
+        "$version-$REVISION~$s$PPA_BUILD" --distribution "$s" \
         --changelog "$tree/debian/changelog" \
         "Packages of the $version release of the project." 2>/dev/null ||
     { echo "$(basename "$0"): dch failed, is devscripts installed?" >&2;
       exit 1; }
-    (cd "$tree" && dpkg-buildpackage -S -sa -d "${sign[@]}")
+    if [ "$PPA_BUILD" -gt 1 ]; then origs=-sd; else origs=-sa; fi
+    (cd "$tree" && dpkg-buildpackage -S "$origs" -d "${sign[@]}")
     if [ "$upload" = yes ]; then
-        dput "$PPA" "smspp-project_$version-$REVISION~$s${REVISION}_source.changes"
+        dput "$PPA" "smspp-project_$version-$REVISION~$s${PPA_BUILD}_source.changes"
     fi
 done
 
