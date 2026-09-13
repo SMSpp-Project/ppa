@@ -1,0 +1,79 @@
+#!/usr/bin/make -f
+
+include /usr/share/dpkg/architecture.mk
+
+# link-time optimization of a code base this large is a memory sink, and
+# -Bsymbolic-functions binds the call of an inline function to the copy of
+# the library that makes it, so that the factory of the methods of a Block,
+# a static local of a template, would be one per library instead of one
+export DEB_BUILD_MAINT_OPTIONS = optimize=-lto
+export DEB_LDFLAGS_MAINT_STRIP = -Wl,-Bsymbolic-functions
+# the build type of a Debian package is None, which defines no NDEBUG
+export DEB_CXXFLAGS_MAINT_APPEND = -DNDEBUG
+
+BUILDDIR = obj-$(DEB_HOST_GNU_TYPE)
+
+%:
+	dh $@ --buildsystem=cmake
+
+# the libraries of the archive and not those a source install may have left
+# elsewhere; the StOpt of the archive comes in two builds, and SDDPBlock uses
+# the MPI entry points of the library, so it is the MPI one that it needs,
+# whose name the Find module of the project does not look for either
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		-DBUILD_SHARED_LIBS=ON \
+		-DBUILD_tests=OFF \
+		-DCMAKE_SKIP_INSTALL_RPATH=ON \
+		-DFETCHCONTENT_SOURCE_DIR_FASTFLOW=$(CURDIR)/fastflow \
+		-DFETCHCONTENT_FULLY_DISCONNECTED=ON \
+		-DCMAKE_DISABLE_FIND_PACKAGE_CPLEX=ON \
+		-DCMAKE_DISABLE_FIND_PACKAGE_GUROBI=ON \
+		-DCMAKE_DISABLE_FIND_PACKAGE_SCIP=ON \
+		-DCMAKE_DISABLE_FIND_PACKAGE_PIPS=ON \
+		-DCMAKE_DISABLE_FIND_PACKAGE_Torch=ON \
+		-DHiGHS_ROOT=/usr \
+		-DStOpt_ROOT=/usr \
+		-DStOpt_LIBRARY=/usr/lib/$(DEB_HOST_MULTIARCH)/libstopt-mpi.so \
+		-DCoinUtils_ROOT=/usr \
+		-DOsi_ROOT=/usr \
+		-DClp_ROOT=/usr
+
+# the one build of the umbrella is installed one module at a time, each in
+# its -dev package, out of which the shared library then moves to the
+# library package; the tools are installed one at a time as well
+override_dh_auto_install:
+	set -e; grep -v '^#' debian/modules.tsv | \
+	while read -r dir lib dev extra; do \
+		cmake --install $(BUILDDIR)/$$dir --prefix $(CURDIR)/debian/$$dev/usr; \
+		libdir=usr/lib/$(DEB_HOST_MULTIARCH); \
+		for pair in $$extra; do \
+			mkdir -p debian/$${pair%%=*}/$$libdir; \
+			mv debian/$$dev/$$libdir/$${pair#*=}.so.* \
+				debian/$${pair%%=*}/$$libdir/; \
+		done; \
+		mkdir -p debian/$$lib/$$libdir; \
+		mv debian/$$dev/$$libdir/*.so.* debian/$$lib/$$libdir/; \
+	done
+	set -e; grep -v '^#' debian/tools.tsv | while read -r dirs pkg; do \
+		for dir in $$(echo $$dirs | tr ',' ' '); do \
+			cmake --install $(BUILDDIR)/tools/$$dir \
+				--prefix $(CURDIR)/debian/$$pkg/usr; \
+		done; \
+	done
+	set -e; grep -v '^#' debian/helpers.tsv | \
+	while read -r dev exe pkg; do \
+		mkdir -p debian/$$pkg/usr/bin; \
+		mv debian/$$dev/usr/bin/$$exe debian/$$pkg/usr/bin/; \
+		rmdir --ignore-fail-on-non-empty debian/$$dev/usr/bin; \
+	done
+
+# the generator of the parameter headers of a MILP back-end writes them into
+# the include directory of the sources, where a build of a Debian source
+# package must leave nothing behind
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -f MILPSolver/include/HiGHS[0-9]*_defs.h \
+		MILPSolver/include/HiGHS[0-9]*_maps.h
+
+override_dh_auto_test:

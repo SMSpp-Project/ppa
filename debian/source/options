@@ -1,0 +1,3 @@
+# the tarball of a release of the umbrella carries the build directories and
+# the object files of the makefile builds of its modules
+extend-diff-ignore = "(^|/)(obj|lib)/|^MILPSolver/include/HiGHS[0-9]+_(defs|maps)\\.h$"

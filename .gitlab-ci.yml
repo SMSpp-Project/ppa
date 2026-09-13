@@ -1,0 +1,32 @@
+# The release pipeline of smspp-project triggers this one with the version of
+# the new tag in SMSPP_VERSION: the source package of that release is built
+# for every series in SMSPP_SERIES and uploaded to the PPA.
+#
+# The upload is signed with the GPG key of the PPA, which the job takes from
+# the file variable PPA_GPG_KEY (Settings > CI/CD > Variables, type File,
+# protected and masked): without it the job only builds the source package
+# and keeps it as an artifact, for an upload by hand.
+
+variables:
+  SMSPP_SERIES: resolute
+
+build_source:
+  image: ubuntu:26.04
+  rules:
+    - if: $SMSPP_VERSION
+  variables:
+    DEBIAN_FRONTEND: noninteractive
+  before_script:
+    - apt-get update -qq
+    - apt-get install -y --no-install-recommends
+        devscripts dput dpkg-dev python3 curl ca-certificates gnupg lsb-release
+    - if [ -n "$PPA_GPG_KEY" ]; then gpg --batch --import "$PPA_GPG_KEY"; fi
+  script:
+    - if [ -n "$PPA_GPG_KEY" ]; then upload=--upload; else upload=; fi
+    - ./mk-ppa-source "$SMSPP_VERSION" $SMSPP_SERIES $upload
+  artifacts:
+    paths:
+      - ppa-$SMSPP_VERSION/*.dsc
+      - ppa-$SMSPP_VERSION/*.tar.*
+      - ppa-$SMSPP_VERSION/*_source.changes
+    expire_in: 1 month

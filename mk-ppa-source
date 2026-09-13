@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+# --------------------------------------------------------------------------- #
+#    Source package of SMS++ for a PPA                                        #
+#                                                                             #
+#    Builds the Debian source package of a release of the umbrella, for one    #
+#    or more Ubuntu series, out of the release tarball and of the debian/      #
+#    directory of this repository, and uploads it to the PPA with --upload.    #
+#                                                                             #
+#    Usage: mk-ppa-source <version> [<series> ...] [--upload]                  #
+#                                                                             #
+#                                Donato Meoli                                 #
+#                         Dipartimento di Informatica                         #
+#                             Universita' di Pisa                             #
+# --------------------------------------------------------------------------- #
+set -euo pipefail
+
+# SMS++ fetches FastFlow at configure time: the source package carries it as a
+# second component, at the commit the other packages of the project pin too
+FASTFLOW_COMMIT=d476f66ab924d8d122f54b4b90aee00ef979aea8
+REGISTRY=https://gitlab.com/api/v4/projects/smspp%2Fsmspp-project/packages/generic/smspp-project
+PPA=${SMSPP_PPA:-ppa:dmeoli/smspp}
+REVISION=${SMSPP_REVISION:-1}
+
+here=$(cd "$(dirname "$0")" && pwd)
+version=""
+series=()
+upload=no
+for arg in "$@"; do
+    case $arg in
+        --upload) upload=yes ;;
+        -*) echo "$(basename "$0"): unknown option $arg" >&2; exit 2 ;;
+        *) if [ -z "$version" ]; then version=$arg; else series+=("$arg"); fi ;;
+    esac
+done
+if [ -z "$version" ]; then
+    echo "usage: $(basename "$0") <version> [<series> ...] [--upload]" >&2
+    exit 2
+fi
+[ ${#series[@]} -gt 0 ] || series=($(lsb_release -cs))
+
+# Launchpad takes the identity of the uploader from the signature of the
+# source package: without a key the package is still built, unsigned, and
+# only an upload by hand of a signed one will do
+sign=()
+if ! gpg --list-secret-keys >/dev/null 2>&1 ||
+   [ -z "$(gpg --list-secret-keys --with-colons 2>/dev/null | grep '^sec')" ]; then
+    sign=(-us -uc)
+    if [ "$upload" = yes ]; then
+        echo "$(basename "$0"): no secret GPG key, nothing to upload" >&2
+        exit 1
+    fi
+    echo "$(basename "$0"): no secret GPG key, the package will be unsigned" >&2
+fi
+
+work=${SMSPP_WORKDIR:-$PWD/ppa-$version}
+mkdir -p "$work"
+cd "$work"
+
+tarball=smspp-project_${version}.orig.tar.gz
+if [ ! -f "$tarball" ]; then
+    curl -fsSL -o "$tarball" \
+        "$REGISTRY/$version/smspp-project-$version.tar.gz"
+fi
+ff=smspp-project_${version}.orig-fastflow.tar.gz
+if [ ! -f "$ff" ]; then
+    curl -fsSL -o fastflow.tar.gz \
+        "https://github.com/fastflow/fastflow/archive/$FASTFLOW_COMMIT.tar.gz"
+    rm -rf fastflow && mkdir fastflow-unpack
+    tar xzf fastflow.tar.gz -C fastflow-unpack
+    mv fastflow-unpack/fastflow-* fastflow
+    tar czf "$ff" fastflow
+    rm -rf fastflow fastflow-unpack fastflow.tar.gz
+fi
+
+for s in "${series[@]}"; do
+    tree=smspp-project-$version
+    rm -rf "$tree"
+    mkdir "$tree"
+    tar xzf "$tarball" -C "$tree"
+    cp -r "$here/debian" "$tree/debian"
+    python3 "$here/gen_debian.py" "$tree"
+    rm -f "$tree/debian/changelog"
+    # a PPA needs a version of its own for every series, ordered as the series
+    DEBEMAIL=${DEBEMAIL:-donato.meoli.95@gmail.com} \
+    DEBFULLNAME=${DEBFULLNAME:-Donato Meoli} \
+    dch --create --package smspp-project --newversion \
+        "$version-$REVISION~$s$REVISION" --distribution "$s" \
+        --changelog "$tree/debian/changelog" \
+        "Packages of the $version release of the project." 2>/dev/null ||
+    { echo "$(basename "$0"): dch failed, is devscripts installed?" >&2;
+      exit 1; }
+    (cd "$tree" && dpkg-buildpackage -S -sa -d "${sign[@]}")
+    if [ "$upload" = yes ]; then
+        dput "$PPA" "smspp-project_$version-$REVISION~$s${REVISION}_source.changes"
+    fi
+done
+
+echo "source packages in $work"

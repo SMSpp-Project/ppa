@@ -1,0 +1,35 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: SMS++
+Upstream-Contact: Antonio Frangioni <frangio@di.unipi.it>
+Source: https://gitlab.com/smspp/smspp-project
+
+Files: *
+Copyright: 2019-2026 Antonio Frangioni and the authors of the single files
+License: LGPL-3
+
+Files: fastflow/*
+Copyright: 2010-2024 Massimo Torquati and the FastFlow authors
+License: LGPL-3 or GPL-2+ with linking exception
+Comment: FastFlow is a header-only library, used while building the parallel
+ Solvers of the project and not shipped by any package.
+
+License: LGPL-3
+ This package is free software; you can redistribute it and/or modify it
+ under the terms of the GNU Lesser General Public License version 3 as
+ published by the Free Software Foundation.
+ .
+ This package is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+ License for more details.
+ .
+ On Debian systems the complete text of the GNU Lesser General Public
+ License version 3 can be found in /usr/share/common-licenses/LGPL-3.
+
+License: GPL-2+ with linking exception
+ FastFlow is also available under the GNU General Public License version 2
+ or later, with the exception that linking it into a program does not by
+ itself make the program a derivative work.
+ .
+ On Debian systems the complete text of the GNU General Public License
+ version 2 can be found in /usr/share/common-licenses/GPL-2.
