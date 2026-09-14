@@ -63,4 +63,4 @@ after the release of the umbrella whose packages it built.
 
 - `mk-ppa-source`, which takes the release tarball and FastFlow at the commit
   the other packages of the project pin, builds the source package for a
-  series and uploads it to `ppa:smspp/ppa`
+  series and uploads it to `ppa:smspp-project/smspp`

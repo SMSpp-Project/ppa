@@ -18,7 +18,7 @@ set -euo pipefail
 # second component, at the commit the other packages of the project pin too
 FASTFLOW_COMMIT=d476f66ab924d8d122f54b4b90aee00ef979aea8
 REGISTRY=https://gitlab.com/api/v4/projects/smspp%2Fsmspp-project/packages/generic/smspp-project
-PPA=${SMSPP_PPA:-ppa:smspp/ppa}
+PPA=${SMSPP_PPA:-ppa:smspp-project/smspp}
 REVISION=${SMSPP_REVISION:-1}
 # a second upload of the same revision to the PPA only bumps this, and then
 # the orig tarballs stay out of the upload, the archive has them already
