@@ -17,6 +17,9 @@ set -euo pipefail
 # SMS++ fetches FastFlow at configure time: the source package carries it as a
 # second component, at the commit the other packages of the project pin too
 FASTFLOW_COMMIT=d476f66ab924d8d122f54b4b90aee00ef979aea8
+# the date of the FastFlow commit, so that the repacked component is
+# byte for byte the same wherever it is built
+FASTFLOW_EPOCH=${SMSPP_FASTFLOW_EPOCH:-1700000000}
 REGISTRY=https://gitlab.com/api/v4/projects/smspp%2Fsmspp-project/packages/generic/smspp-project
 PPA=${SMSPP_PPA:-ppa:smspp-project/smspp}
 REVISION=${SMSPP_REVISION:-1}
@@ -74,7 +77,10 @@ if [ ! -f "$ff" ]; then
     rm -rf fastflow && mkdir fastflow-unpack
     tar xzf fastflow.tar.gz -C fastflow-unpack
     mv fastflow-unpack/fastflow-* fastflow
-    tar czf "$ff" fastflow
+    # the component has to come out the same on every machine, or a second
+    # series uploaded later is refused: same contents, different bytes
+    tar --sort=name --format=gnu --owner=0 --group=0 --numeric-owner \
+        --mtime="@$FASTFLOW_EPOCH" -cf - fastflow | gzip -n > "$ff"
     rm -rf fastflow fastflow-unpack fastflow.tar.gz
 fi
 
