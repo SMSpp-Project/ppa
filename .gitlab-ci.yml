@@ -13,7 +13,9 @@ workflow:
     - if: $SMSPP_VERSION
 
 variables:
-  SMSPP_SERIES: resolute
+  # the LTS and the current release: noble takes highs from this same PPA,
+  # which has the backport, since the archive of the LTS has none
+  SMSPP_SERIES: noble resolute
 
 build_source:
   image: ubuntu:26.04
