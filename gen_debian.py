@@ -86,11 +86,10 @@ LIBS = [
      "hands it to a solver; this build carries the HiGHS backend, while the\n"
      "CPLEX, Gurobi and SCIP ones need those libraries at build time."),
     ("BundleSolver", "libsmspp-bundle", ["libsmspp-milp"],
-     ["coinor-libclp-dev", "coinor-libosi-dev", "coinor-libcoinutils-dev",
-      "libopenblas-dev"],
+     ["libopenblas-dev"],
      "bundle Solver for SMS++",
      "The Solver of a nondifferentiable problem by the generalized bundle\n"
-     "method, over the NDOSolver/FiOracle interface it bundles."),
+     "method, whose master problem is solved by the MILP Solver attached to it."),
     ("LagrangianDualSolver", "libsmspp-lds", ["libsmspp-milp"], [],
      "Lagrangian dual Solver for SMS++",
      "The Solver that builds the Lagrangian dual of a Block with linking\n"
@@ -212,8 +211,7 @@ BUILD_DEPS = [
     "libeigen3-dev", "libnetcdf-c++4-dev",
     "libhighs-dev", "libstopt-dev", "libgeners-dev", "libbz2-dev",
     "zlib1g-dev", "liblemon-dev", "libsvm-dev",
-    "liblinear-dev", "libopenblas-dev", "coinor-libclp-dev",
-    "coinor-libosi-dev", "coinor-libcoinutils-dev", "mpi-default-dev",
+    "liblinear-dev", "libopenblas-dev", "mpi-default-dev",
 ]
 
 
