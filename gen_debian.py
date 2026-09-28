@@ -80,6 +80,12 @@ LIBS = [
      "delay-constrained routing Block for SMS++",
      "The Block of the single-flow delay-constrained routing problem, with\n"
      "its Benders Solver."),
+    ("SATBlock", "libsmspp-sat", ["libsmspp"], ["libcadical-dev"],
+     "satisfiability and weighted MaxSAT Block for SMS++",
+     "The Block of the satisfiability problems and of the weighted partial\n"
+     "MaxSAT, whose abstract representation is the MILP formulation, and\n"
+     "the Solver that hands it to CaDiCaL, which also solves the weighted\n"
+     "MaxSAT by the core-guided algorithm OLL."),
     ("MILPSolver", "libsmspp-milp", ["libsmspp"], ["libhighs-dev"],
      "MILP Solvers for SMS++",
      "The Solver that writes any Block as a mixed-integer linear program and\n"
@@ -210,7 +216,7 @@ BUILD_DEPS = [
     "libeigen3-dev", "libnetcdf-c++4-dev",
     "libhighs-dev", "libstopt-dev", "libgeners-dev", "libbz2-dev",
     "zlib1g-dev", "liblemon-dev", "libsvm-dev",
-    "liblinear-dev", "mpi-default-dev",
+    "liblinear-dev", "libcadical-dev", "mpi-default-dev",
 ]
 
 
