@@ -192,11 +192,6 @@ BUNDLED = [
      "MCFClass solves the min-cost flow problem by the network simplex, the\n"
      "relaxation and the cost-scaling algorithms, behind one interface; the\n"
      "MCFClassSolver module of SMS++ wraps it."),
-    ("BundleSolver", "NdoFiOracle", "libndofioracle", "libNDOFiOracle",
-     "bundle methods of the NDOSolver/FiOracle library",
-     "NDOSolver/FiOracle solves a nondifferentiable problem given by an\n"
-     "oracle of its function, by the generalized bundle method and by\n"
-     "subgradient methods; the BundleSolver module of SMS++ wraps it."),
 ]
 
 # the install of a module carries an auxiliary executable, which belongs to

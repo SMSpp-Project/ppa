@@ -19,6 +19,10 @@ after the release of the umbrella whose packages it built.
 
 ### Changed
 
+- `libndofioracle` is no longer built: BundleSolver 2.0 has no
+  NDOSolver/FiOracle inside, and the generator would look for a directory
+  that the release no longer has
+
 ### Fixed
 
 ## [0.6.2] - 2026-09-13
