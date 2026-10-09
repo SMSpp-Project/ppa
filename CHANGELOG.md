@@ -25,6 +25,11 @@ after the release of the umbrella whose packages it built.
 
 ### Fixed
 
+- the package is configured with `BUILD_TESTING` off: the unit tests of
+  the modules are not part of it, and the one of SATBlock downloads its
+  instances while building, which a builder of Launchpad, having no
+  network, cannot do
+
 ## [0.6.2] - 2026-09-13
 
 ### Added
