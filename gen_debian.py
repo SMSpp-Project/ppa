@@ -80,17 +80,21 @@ LIBS = [
      "delay-constrained routing Block for SMS++",
      "The Block of the single-flow delay-constrained routing problem, with\n"
      "its Benders Solver."),
+    ("SATBlock", "libsmspp-sat", ["libsmspp"], ["libcadical-dev"],
+     "satisfiability and weighted MaxSAT Block for SMS++",
+     "The Block of the satisfiability problems and of the weighted partial\n"
+     "MaxSAT, whose abstract representation is the MILP formulation, and\n"
+     "the Solver that hands it to CaDiCaL, which also solves the weighted\n"
+     "MaxSAT by the core-guided algorithm OLL."),
     ("MILPSolver", "libsmspp-milp", ["libsmspp"], ["libhighs-dev"],
      "MILP Solvers for SMS++",
      "The Solver that writes any Block as a mixed-integer linear program and\n"
      "hands it to a solver; this build carries the HiGHS backend, while the\n"
      "CPLEX, Gurobi and SCIP ones need those libraries at build time."),
-    ("BundleSolver", "libsmspp-bundle", ["libsmspp-milp"],
-     ["coinor-libclp-dev", "coinor-libosi-dev", "coinor-libcoinutils-dev",
-      "libopenblas-dev"],
+    ("BundleSolver", "libsmspp-bundle", ["libsmspp-milp"], [],
      "bundle Solver for SMS++",
      "The Solver of a nondifferentiable problem by the generalized bundle\n"
-     "method, over the NDOSolver/FiOracle interface it bundles."),
+     "method, whose master problem is solved by the MILP Solver attached to it."),
     ("LagrangianDualSolver", "libsmspp-lds", ["libsmspp-milp"], [],
      "Lagrangian dual Solver for SMS++",
      "The Solver that builds the Lagrangian dual of a Block with linking\n"
@@ -188,11 +192,6 @@ BUNDLED = [
      "MCFClass solves the min-cost flow problem by the network simplex, the\n"
      "relaxation and the cost-scaling algorithms, behind one interface; the\n"
      "MCFClassSolver module of SMS++ wraps it."),
-    ("BundleSolver", "NdoFiOracle", "libndofioracle", "libNDOFiOracle",
-     "bundle methods of the NDOSolver/FiOracle library",
-     "NDOSolver/FiOracle solves a nondifferentiable problem given by an\n"
-     "oracle of its function, by the generalized bundle method and by\n"
-     "subgradient methods; the BundleSolver module of SMS++ wraps it."),
 ]
 
 # the install of a module carries an auxiliary executable, which belongs to
@@ -212,8 +211,7 @@ BUILD_DEPS = [
     "libeigen3-dev", "libnetcdf-c++4-dev",
     "libhighs-dev", "libstopt-dev", "libgeners-dev", "libbz2-dev",
     "zlib1g-dev", "liblemon-dev", "libsvm-dev",
-    "liblinear-dev", "libopenblas-dev", "coinor-libclp-dev",
-    "coinor-libosi-dev", "coinor-libcoinutils-dev", "mpi-default-dev",
+    "liblinear-dev", "libcadical-dev", "mpi-default-dev",
 ]
 
 

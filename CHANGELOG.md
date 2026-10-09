@@ -12,7 +12,16 @@ after the release of the umbrella whose packages it built.
 
 ### Added
 
+- `libsmspp-sat`, the package of SATBlock, whose Solvers carry CaDiCaL,
+  which Ubuntu has from 24.04 on; MiniSat is left out, since the `minisat`
+  package of Ubuntu carries the older code of minisat.se, on which the
+  MiniSat Solver of SATBlock does not compile
+
 ### Changed
+
+- `libndofioracle` is no longer built: BundleSolver 2.0 has no
+  NDOSolver/FiOracle inside, and the generator would look for a directory
+  that the release no longer has
 
 ### Fixed
 

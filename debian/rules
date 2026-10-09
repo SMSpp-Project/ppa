@@ -32,12 +32,11 @@ override_dh_auto_configure:
 		-DCMAKE_DISABLE_FIND_PACKAGE_SCIP=ON \
 		-DCMAKE_DISABLE_FIND_PACKAGE_PIPS=ON \
 		-DCMAKE_DISABLE_FIND_PACKAGE_Torch=ON \
+		-DCMAKE_DISABLE_FIND_PACKAGE_MiniSat=ON \
 		-DHiGHS_ROOT=/usr \
+		-DCADICAL_ROOT=/usr \
 		-DStOpt_ROOT=/usr \
-		-DStOpt_LIBRARY=/usr/lib/$(DEB_HOST_MULTIARCH)/libstopt-mpi.so \
-		-DCoinUtils_ROOT=/usr \
-		-DOsi_ROOT=/usr \
-		-DClp_ROOT=/usr
+		-DStOpt_LIBRARY=/usr/lib/$(DEB_HOST_MULTIARCH)/libstopt-mpi.so
 
 # the one build of the umbrella is installed one module at a time, each in
 # its -dev package, out of which the shared library then moves to the
