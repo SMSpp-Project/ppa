@@ -24,6 +24,7 @@ override_dh_auto_configure:
 	dh_auto_configure -- \
 		-DBUILD_SHARED_LIBS=ON \
 		-DBUILD_tests=OFF \
+		-DBUILD_TESTING=OFF \
 		-DCMAKE_SKIP_INSTALL_RPATH=ON \
 		-DFETCHCONTENT_SOURCE_DIR_FASTFLOW=$(CURDIR)/fastflow \
 		-DFETCHCONTENT_FULLY_DISCONNECTED=ON \
