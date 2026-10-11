@@ -86,6 +86,16 @@ LIBS = [
      "MaxSAT, whose abstract representation is the MILP formulation, and\n"
      "the Solver that hands it to CaDiCaL, which also solves the weighted\n"
      "MaxSAT by the core-guided algorithm OLL."),
+    ("SatellitesBlock", "libsmspp-satellites", ["libsmspp"], [],
+     "satellite constellation design Block for SMS++",
+     "The Blocks of the satellite constellation design problem, which\n"
+     "minimizes the number of satellites or the revisit times of the\n"
+     "targets, with their Solvers."),
+    ("MultiKnapsackAssignBlock", "libsmspp-mkab", ["libsmspp-bkb"], [],
+     "multiple knapsack assignment Block for SMS++",
+     "The Block of the multiple knapsack assignment problem, whose knapsacks\n"
+     "are BinaryKnapsackBlock and each of which takes at most one class of\n"
+     "items."),
     ("MILPSolver", "libsmspp-milp", ["libsmspp"], ["libhighs-dev"],
      "MILP Solvers for SMS++",
      "The Solver that writes any Block as a mixed-integer linear program and\n"
