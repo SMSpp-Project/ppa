@@ -95,7 +95,8 @@ LIBS = [
      "bundle Solver for SMS++",
      "The Solver of a nondifferentiable problem by the generalized bundle\n"
      "method, whose master problem is solved by the MILP Solver attached to it."),
-    ("LagrangianDualSolver", "libsmspp-lds", ["libsmspp-milp"], [],
+    ("LagrangianDualSolver", "libsmspp-lds",
+     ["libsmspp-milp", "libsmspp-bnx"], [],
      "Lagrangian dual Solver for SMS++",
      "The Solver that builds the Lagrangian dual of a Block with linking\n"
      "constraints and solves it with an inner Solver."),

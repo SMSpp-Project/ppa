@@ -19,6 +19,9 @@ after the release of the umbrella whose packages it built.
 
 ### Changed
 
+- `libsmspp-lds` depends on `libsmspp-bnx`, since LagrangianDualSolver
+  chooses the variable to branch upon by the components of BranchAndXSolver
+
 - `libndofioracle` is no longer built: BundleSolver 2.0 has no
   NDOSolver/FiOracle inside, and the generator would look for a directory
   that the release no longer has
