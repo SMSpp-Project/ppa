@@ -1,0 +1,39 @@
+Source: daqp
+Section: math
+Priority: optional
+Maintainer: Donato Meoli <donato.meoli.95@gmail.com>
+Build-Depends: debhelper-compat (= 13), cmake (>= 3.10)
+Standards-Version: 4.7.2
+Homepage: https://github.com/darnstrom/daqp
+Vcs-Browser: https://gitlab.com/smspp/ppa/-/tree/develop/daqp
+Vcs-Git: https://gitlab.com/smspp/ppa.git -b develop [daqp]
+Rules-Requires-Root: no
+
+Package: libdaqp0.10
+Architecture: any
+Multi-Arch: same
+Section: libs
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: dual active-set solver for convex quadratic programs
+ DAQP solves convex quadratic programs, and linear ones, with linear
+ inequality and equality constraints and simple bounds by a dual active-set
+ method, which can be warm started from the working set of a previous solve;
+ it also handles soft constraints, hierarchical problems and, by branch and
+ bound, binary variables.
+ .
+ This package holds the shared library.
+
+Package: libdaqp-dev
+Architecture: any
+Multi-Arch: same
+Section: libdevel
+Depends: libdaqp0.10 (= ${binary:Version}), ${misc:Depends}
+Description: dual active-set solver for convex QPs (development files)
+ DAQP solves convex quadratic programs, and linear ones, with linear
+ inequality and equality constraints and simple bounds by a dual active-set
+ method, which can be warm started from the working set of a previous solve;
+ it also handles soft constraints, hierarchical problems and, by branch and
+ bound, binary variables.
+ .
+ This package holds the headers, the static library and the CMake
+ configuration that find_package(daqp) finds.

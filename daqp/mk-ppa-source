@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# --------------------------------------------------------------------------- #
+#    Source package of DAQP for the PPA                                       #
+#                                                                             #
+#    Builds the Debian source package of a release of DAQP, which the MILP    #
+#    Solvers of SMS++ use and no Ubuntu series carries, for one or more       #
+#    series, out of the tarball of the tag and of the debian/ directory next  #
+#    to this script, and uploads it to the PPA with --upload.                 #
+#                                                                             #
+#    Usage: daqp/mk-ppa-source [<series> ...] [--upload]                      #
+#                                                                             #
+#                                Donato Meoli                                 #
+#                         Dipartimento di Informatica                         #
+#                             Universita' di Pisa                             #
+# --------------------------------------------------------------------------- #
+set -euo pipefail
+
+VERSION=${DAQP_VERSION:-0.10.3}
+PPA=${SMSPP_PPA:-ppa:smspp-project/smspp}
+REVISION=${DAQP_REVISION:-1}
+# a second upload of the same revision to the PPA only bumps this, and then
+# the orig tarball stays out of the upload, the archive has it already
+PPA_BUILD=${SMSPP_PPA_BUILD:-1}
+
+here=$(cd "$(dirname "$0")" && pwd)
+series=()
+upload=no
+for arg in "$@"; do
+    case $arg in
+        --upload) upload=yes ;;
+        -*) echo "$(basename "$0"): unknown option $arg" >&2; exit 2 ;;
+        *) series+=("$arg") ;;
+    esac
+done
+[ ${#series[@]} -gt 0 ] || series=($(lsb_release -cs))
+
+sign=()
+[ -n "${SMSPP_SIGN_KEY:-}" ] && sign=(-k"$SMSPP_SIGN_KEY")
+if ! gpg --list-secret-keys >/dev/null 2>&1 ||
+   [ -z "$(gpg --list-secret-keys --with-colons 2>/dev/null | grep '^sec')" ]; then
+    sign=(-us -uc)
+    if [ "$upload" = yes ]; then
+        echo "$(basename "$0"): no secret GPG key, nothing to upload" >&2
+        exit 1
+    fi
+    echo "$(basename "$0"): no secret GPG key, the package will be unsigned" >&2
+fi
+
+work=${SMSPP_WORKDIR:-$PWD/ppa-daqp-$VERSION}
+mkdir -p "$work"
+cd "$work"
+
+tarball=daqp_${VERSION}.orig.tar.gz
+if [ ! -f "$tarball" ]; then
+    curl -fsSL -o "$tarball" \
+        "https://github.com/darnstrom/daqp/archive/refs/tags/v$VERSION.tar.gz"
+fi
+
+for s in "${series[@]}"; do
+    tree=daqp-$VERSION
+    rm -rf "$tree"
+    tar xzf "$tarball"
+    cp -r "$here/debian" "$tree/debian"
+    # a PPA needs a version of its own for every series, ordered as the series
+    DEBEMAIL=${DEBEMAIL:-donato.meoli.95@gmail.com} \
+    DEBFULLNAME=${DEBFULLNAME:-Donato Meoli} \
+    dch --create --package daqp --newversion \
+        "$VERSION-$REVISION~$s$PPA_BUILD" --distribution "$s" \
+        --changelog "$tree/debian/changelog" \
+        "Release $VERSION of DAQP, for the MILP Solvers of SMS++." \
+        2>/dev/null ||
+    { echo "$(basename "$0"): dch failed, is devscripts installed?" >&2;
+      exit 1; }
+    if [ "$PPA_BUILD" -gt 1 ]; then origs=-sd; else origs=-sa; fi
+    (cd "$tree" && dpkg-buildpackage -S "$origs" -d "${sign[@]}")
+    if [ "$upload" = yes ]; then
+        dput "$PPA" "daqp_$VERSION-$REVISION~$s${PPA_BUILD}_source.changes"
+    fi
+done
+
+echo "source packages in $work"

@@ -96,11 +96,13 @@ LIBS = [
      "The Block of the multiple knapsack assignment problem, whose knapsacks\n"
      "are BinaryKnapsackBlock and each of which takes at most one class of\n"
      "items."),
-    ("MILPSolver", "libsmspp-milp", ["libsmspp"], ["libhighs-dev"],
+    ("MILPSolver", "libsmspp-milp", ["libsmspp"],
+     ["libhighs-dev", "libdaqp-dev"],
      "MILP Solvers for SMS++",
      "The Solver that writes any Block as a mixed-integer linear program and\n"
-     "hands it to a solver; this build carries the HiGHS backend, while the\n"
-     "CPLEX, Gurobi and SCIP ones need those libraries at build time."),
+     "hands it to a solver; this build carries the HiGHS backend and the DAQP\n"
+     "one, for convex quadratic programs with no integer variables, while\n"
+     "the CPLEX, Gurobi and SCIP ones need those libraries at build time."),
     ("BundleSolver", "libsmspp-bundle", ["libsmspp-milp"], [],
      "bundle Solver for SMS++",
      "The Solver of a nondifferentiable problem by the generalized bundle\n"
@@ -220,7 +222,7 @@ BUILD_DEPS = [
     "debhelper-compat (= 13)", "cmake (>= 3.21)", "pkgconf", "help2man",
     "libboost-dev", "libboost-mpi-dev", "libboost-timer-dev",
     "libeigen3-dev", "libnetcdf-c++4-dev",
-    "libhighs-dev", "libstopt-dev", "libgeners-dev", "libbz2-dev",
+    "libhighs-dev", "libdaqp-dev", "libstopt-dev", "libgeners-dev", "libbz2-dev",
     "zlib1g-dev", "liblemon-dev", "libsvm-dev",
     "liblinear-dev", "libcadical-dev", "mpi-default-dev",
 ]

@@ -1,0 +1,4 @@
+usr/include/daqp
+usr/lib/${DEB_HOST_MULTIARCH}/libdaqp.so
+usr/lib/${DEB_HOST_MULTIARCH}/libdaqpstat.a
+usr/lib/${DEB_HOST_MULTIARCH}/cmake/daqp

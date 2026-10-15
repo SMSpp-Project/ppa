@@ -23,6 +23,8 @@ files, its examples and its man page.
     gen_debian.py     generator of those tables, whose own tables carry the
                       modules, the tools and their dependencies
     mk-ppa-source     source package of a release, for one or more series
+    daqp/             the source package of DAQP, the QP solver of the MILP
+                      Solvers, which no Ubuntu series carries
 
 ## A release
 
@@ -47,6 +49,24 @@ name, since the SONAME changes with it.
 ## What the packages do not carry
 
 CPLEX, Gurobi and SCIP are not redistributable, so `libsmspp-milp` carries the
-HiGHS backend alone; a build against the others is still the one of the
-sources. FastFlow, which the core fetches at configure time, travels in the
+HiGHS and DAQP backends alone; a build against the others is still the one of
+the sources. FastFlow, which the core fetches at configure time, travels in the
 source package as a second component, so that the build needs no network.
+
+## DAQP
+
+DAQP, the dual active-set solver of `DAQPMILPSolver`, is in no Ubuntu series,
+so the PPA carries it as a source package of its own, out of the tag of its
+release and of `daqp/debian`: `libdaqp0.10` holds the shared library, whose
+SONAME is `libdaqp.so.0.10`, and `libdaqp-dev` the headers, the static library
+and the CMake configuration. The patch in `daqp/debian/patches` builds the
+static library without linking the shared one, links the math library and
+installs the CMake configuration where `find_package()` looks for it.
+
+    daqp/mk-ppa-source noble resolute --upload
+
+builds the source package of DAQP for both series and uploads it; it has to
+be built on Launchpad before the first upload of SMS++ that depends on
+`libdaqp-dev`. A new release of DAQP is `DAQP_VERSION` in that script, and a
+new SONAME the name of the library package in `daqp/debian/control` and of
+its `.install` file.

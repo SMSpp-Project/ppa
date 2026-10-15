@@ -1,0 +1,4 @@
+version=4
+opts="filenamemangle=s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%daqp-$1.tar.gz%" \
+  https://github.com/darnstrom/daqp/tags \
+  (?:.*?/)?v?(\d[\d.]*)\.tar\.gz

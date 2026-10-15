@@ -12,6 +12,12 @@ after the release of the umbrella whose packages it built.
 
 ### Added
 
+- `daqp/`, the source package of DAQP 0.10.3, the QP solver of
+  `DAQPMILPSolver`, which no Ubuntu series carries: `libdaqp0.10` and
+  `libdaqp-dev`, built for the series of the PPA by `daqp/mk-ppa-source`;
+  `libsmspp-milp-dev` depends on `libdaqp-dev`, and the build of the umbrella
+  finds DAQP in `/usr`
+
 - `libsmspp-sat`, the package of SATBlock, whose Solvers carry CaDiCaL,
   which Ubuntu has from 24.04 on; MiniSat is left out, since the `minisat`
   package of Ubuntu carries the older code of minisat.se, on which the
