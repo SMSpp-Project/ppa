@@ -107,6 +107,11 @@ LIBS = [
      "bundle Solver for SMS++",
      "The Solver of a nondifferentiable problem by the generalized bundle\n"
      "method, whose master problem is solved by the MILP Solver attached to it."),
+    ("SubGradSolver", "libsmspp-subgrad", ["libsmspp"], [],
+     "subgradient Solver for SMS++",
+     "The Solver of a nondifferentiable problem by the deflected and\n"
+     "projected subgradient methods, with the Polyak, ColorTV, FumeroTV,\n"
+     "Volume and primal-dual rules."),
     ("LagrangianDualSolver", "libsmspp-lds",
      ["libsmspp-milp", "libsmspp-bnx"], [],
      "Lagrangian dual Solver for SMS++",

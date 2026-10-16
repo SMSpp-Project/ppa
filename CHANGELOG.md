@@ -26,6 +26,8 @@ after the release of the umbrella whose packages it built.
 - `libsmspp-satellites` and `libsmspp-mkab`, the packages of SatellitesBlock
   and of MultiKnapsackAssignBlock, which the generator left out
 
+- `libsmspp-subgrad`, the package of SubGradSolver
+
 ### Changed
 
 - `libsmspp-lds` depends on `libsmspp-bnx`, since LagrangianDualSolver
