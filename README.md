@@ -23,8 +23,10 @@ files, its examples and its man page.
     gen_debian.py     generator of those tables, whose own tables carry the
                       modules, the tools and their dependencies
     mk-ppa-source     source package of a release, for one or more series
-    daqp/             the source package of DAQP, the QP solver of the MILP
+    daqp/             the source package of DAQP, a QP solver of the MILP
                       Solvers, which no Ubuntu series carries
+    qpoases/          the source package of qpOASES, another QP solver of
+                      the MILP Solvers, which no Ubuntu series carries
 
 ## A release
 
@@ -48,9 +50,10 @@ name, since the SONAME changes with it.
 
 ## What the packages do not carry
 
-CPLEX, Gurobi and SCIP are not redistributable, so `libsmspp-milp` carries the
-HiGHS and DAQP backends alone; a build against the others is still the one of
-the sources. FastFlow, which the core fetches at configure time, travels in the
+CPLEX, Gurobi, SCIP and MOSEK are not redistributable, and the C interface of
+Clarabel is in no package, so `libsmspp-milp` carries the HiGHS, DAQP and
+qpOASES backends alone; a build against the others is still the one of the
+sources. FastFlow, which the core fetches at configure time, travels in the
 source package as a second component, so that the build needs no network.
 
 ## DAQP
@@ -70,3 +73,18 @@ be built on Launchpad before the first upload of SMS++ that depends on
 `libdaqp-dev`. A new release of DAQP is `DAQP_VERSION` in that script, and a
 new SONAME the name of the library package in `daqp/debian/control` and of
 its `.install` file.
+
+## qpOASES
+
+qpOASES, the online active-set solver of `QPOASESMILPSolver`, is in no Ubuntu
+series either, and the PPA carries it the same way, out of the tag of its
+release and of `qpoases/debian`: `libqpoases3.2` holds the shared library,
+whose SONAME is `libqpOASES.so.3.2` and whose own BLAS and LAPACK
+replacements are renamed, and `libqpoases-dev` the headers and the CMake
+configuration. The rules drop the RPATH that upstream puts on the library and
+let the newer CMake accept the old minimum version of the project.
+
+    qpoases/mk-ppa-source noble resolute --upload
+
+builds it for both series and uploads it, before the first upload of SMS++
+that depends on `libqpoases-dev`.

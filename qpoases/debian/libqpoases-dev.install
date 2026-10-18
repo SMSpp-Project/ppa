@@ -1,0 +1,4 @@
+usr/include/qpOASES.hpp
+usr/include/qpOASES
+usr/lib/${DEB_HOST_MULTIARCH}/libqpOASES.so
+usr/lib/${DEB_HOST_MULTIARCH}/cmake/qpOASES

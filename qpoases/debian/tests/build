@@ -1,0 +1,41 @@
+#!/bin/sh
+# a program that solves a small quadratic program, built against the
+# installed package once by the compiler alone and once through the CMake
+# configuration
+set -e
+cd "${AUTOPKGTEST_TMP:-$(mktemp -d)}"
+
+cat > qp.cpp <<'EOC'
+#include <qpOASES.hpp>
+#include <cstdio>
+USING_NAMESPACE_QPOASES
+int main() {
+  // min 0.5 x'x - x1 - x2 s.t. -1 <= x <= 1 and x1 + x2 <= 1
+  real_t H[4] = {1, 0, 0, 1}, g[2] = {-1, -1}, A[2] = {1, 1};
+  real_t lb[2] = {-1, -1}, ub[2] = {1, 1}, lbA[1] = {-1e20}, ubA[1] = {1};
+  QProblem qp(2, 1);
+  Options o;
+  o.printLevel = PL_NONE;
+  qp.setOptions(o);
+  int_t nWSR = 10;
+  returnValue r = qp.init(H, g, A, lb, ub, lbA, ubA, nWSR);
+  real_t x[2];
+  qp.getPrimalSolution(x);
+  std::printf("%d %g %g\n", int(r), x[0], x[1]);
+  return r == SUCCESSFUL_RETURN && x[0] > 0.49 && x[0] < 0.51 ? 0 : 1;
+}
+EOC
+g++ -o qp qp.cpp -lqpOASES
+./qp
+
+cat > CMakeLists.txt <<'EOC'
+cmake_minimum_required(VERSION 3.10)
+project(qp CXX)
+find_package(qpOASES CONFIG REQUIRED)
+add_executable(qp-cmake qp.cpp)
+target_include_directories(qp-cmake PRIVATE ${qpOASES_INCLUDE_DIR})
+target_link_libraries(qp-cmake PRIVATE ${qpOASES_LIBRARY})
+EOC
+cmake -S . -B build
+cmake --build build
+./build/qp-cmake

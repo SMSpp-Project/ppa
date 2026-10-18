@@ -1,0 +1,4 @@
+version=4
+opts="filenamemangle=s%(?:.*?)?releases/(\d[\d.]*)\.tar\.gz%qpoases-$1.tar.gz%" \
+  https://github.com/coin-or/qpOASES/tags \
+  (?:.*?/)?releases/(\d[\d.]*)\.tar\.gz

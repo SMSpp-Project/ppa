@@ -1,0 +1,16 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ --buildsystem=cmake
+
+# a shared library whose own BLAS and LAPACK replacements are renamed, so that
+# it can be linked next to the real ones, without the examples; upstream sets
+# an RPATH of /usr/lib and /usr/lib/casadi on the library, and asks for a
+# version of CMake that the CMake of the newer series no longer accepts
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		-DBUILD_SHARED_LIBS=ON \
+		-DQPOASES_BUILD_EXAMPLES=OFF \
+		-DQPOASES_AVOID_LA_NAMING_CONFLICTS=ON \
+		-DCMAKE_SKIP_INSTALL_RPATH=ON \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5

@@ -12,6 +12,13 @@ after the release of the umbrella whose packages it built.
 
 ### Added
 
+- `qpoases/`, the source package of qpOASES 3.2.2, the QP solver of
+  `QPOASESMILPSolver`, which no Ubuntu series carries: `libqpoases3.2` and
+  `libqpoases-dev`, built for the series of the PPA by
+  `qpoases/mk-ppa-source`; `libsmspp-milp-dev` depends on `libqpoases-dev`,
+  the build of the umbrella finds qpOASES in `/usr`, and MOSEK and Clarabel
+  are kept out of it
+
 - `daqp/`, the source package of DAQP 0.10.3, the QP solver of
   `DAQPMILPSolver`, which no Ubuntu series carries: `libdaqp0.10` and
   `libdaqp-dev`, built for the series of the PPA by `daqp/mk-ppa-source`;

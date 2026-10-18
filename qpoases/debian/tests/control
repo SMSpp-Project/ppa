@@ -1,0 +1,3 @@
+Tests: build
+Depends: libqpoases-dev, build-essential, cmake
+Restrictions: allow-stderr
