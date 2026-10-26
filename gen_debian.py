@@ -96,6 +96,11 @@ LIBS = [
      "The Block of the multiple knapsack assignment problem, whose knapsacks\n"
      "are BinaryKnapsackBlock and each of which takes at most one class of\n"
      "items."),
+    ("HQPBlock", "libsmspp-hqp", ["libsmspp"], [],
+     "hierarchical QP Block and Solver for SMS++",
+     "The Block of a hierarchical (lexicographic) quadratic program, written\n"
+     "as one model in the original variables that goes from a level to the\n"
+     "next one by Modification, and the Solver of its levels."),
     ("MILPSolver", "libsmspp-milp", ["libsmspp"],
      ["libhighs-dev", "libdaqp-dev", "libqpoases-dev"],
      "MILP Solvers for SMS++",

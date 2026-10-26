@@ -12,6 +12,9 @@ after the release of the umbrella whose packages it built.
 
 ### Added
 
+- `libsmspp-hqp`, the package of the new module `HQPBlock` (the Block and
+  the Solver of hierarchical quadratic programs), depending on `libsmspp`
+
 - `qpoases/`, the source package of qpOASES 3.2.2, the QP solver of
   `QPOASESMILPSolver`, which no Ubuntu series carries: `libqpoases3.2` and
   `libqpoases-dev`, built for the series of the PPA by
