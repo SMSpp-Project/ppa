@@ -1,0 +1,46 @@
+Source: ablemon
+Section: math
+Priority: optional
+Maintainer: Donato Meoli <donato.meoli.95@gmail.com>
+Build-Depends: debhelper-compat (= 13), cmake (>= 3.19)
+Standards-Version: 4.7.2
+Homepage: https://github.com/dmeoli/abLEMON
+Vcs-Browser: https://gitlab.com/smspp/ppa/-/tree/develop/ablemon
+Vcs-Git: https://gitlab.com/smspp/ppa.git -b develop [ablemon]
+Rules-Requires-Root: no
+
+Package: libablemon1.8
+Architecture: any
+Multi-Arch: same
+Section: libs
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: maintained fork of LEMON, a C++ library of network optimization
+ abLEMON is a maintained fork of LEMON, the Library for Efficient Modeling
+ and Optimization in Networks: a C++ template library of graphs, maps and
+ heaps and of the algorithms of network optimization built on them
+ (shortest paths, maximum and minimum cost flows, matchings, connectivity,
+ cuts and cycles), with the certificates of infeasible and unbounded minimum
+ cost flow problems and the k best flows. It keeps the headers, the
+ namespace and the CMake package of LEMON.
+ .
+ This package holds the shared library.
+
+Package: ablemon-dev
+Architecture: any
+Multi-Arch: same
+Section: libdevel
+Depends: libablemon1.8 (= ${binary:Version}), ${misc:Depends}
+Conflicts: liblemon-dev
+Replaces: liblemon-dev
+Description: maintained fork of LEMON (development files)
+ abLEMON is a maintained fork of LEMON, the Library for Efficient Modeling
+ and Optimization in Networks: a C++ template library of graphs, maps and
+ heaps and of the algorithms of network optimization built on them
+ (shortest paths, maximum and minimum cost flows, matchings, connectivity,
+ cuts and cycles), with the certificates of infeasible and unbounded minimum
+ cost flow problems and the k best flows. It keeps the headers, the
+ namespace and the CMake package of LEMON.
+ .
+ This package holds the headers, the pkg-config file and the CMake
+ configuration that find_package(LEMON) finds; it takes the place of
+ liblemon-dev, whose headers are installed in the same directory.

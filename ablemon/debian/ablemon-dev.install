@@ -1,0 +1,4 @@
+usr/include/lemon
+usr/lib/${DEB_HOST_MULTIARCH}/libemon.so
+usr/lib/${DEB_HOST_MULTIARCH}/pkgconfig/lemon.pc
+usr/share/lemon/cmake

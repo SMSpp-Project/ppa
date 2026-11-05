@@ -15,7 +15,8 @@ workflow:
 variables:
   # the LTS and the current release: noble takes highs from this same PPA,
   # which has the backport, since the archive of the LTS has none, and both
-  # take daqp from it, which no archive carries [see daqp/]
+  # take daqp, qpoases and ablemon from it, which no archive carries [see
+  # daqp/, qpoases/ and ablemon/]
   SMSPP_SERIES: noble resolute
 
 build_source:

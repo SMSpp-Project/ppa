@@ -27,6 +27,8 @@ files, its examples and its man page.
                       Solvers, which no Ubuntu series carries
     qpoases/          the source package of qpOASES, another QP solver of
                       the MILP Solvers, which no Ubuntu series carries
+    ablemon/          the source package of abLEMON, the maintained fork
+                      of LEMON that MCFLemonSolver needs
 
 ## A release
 
@@ -88,3 +90,21 @@ let the newer CMake accept the old minimum version of the project.
 
 builds it for both series and uploads it, before the first upload of SMS++
 that depends on `libqpoases-dev`.
+
+## abLEMON
+
+abLEMON, the maintained fork of LEMON that `MCFLemonSolver` needs, is in no
+Ubuntu series, whose `liblemon-dev` is the LEMON of COIN-OR; the PPA carries
+it the same way, out of the tag of its release and of `ablemon/debian`:
+`libablemon1.8` holds the shared library, whose SONAME is `libemon.so.1.8`,
+and `ablemon-dev` the headers, the pkg-config file and the CMake
+configuration, which takes the place of `liblemon-dev`, since both install
+the headers in `/usr/include/lemon`. The library alone is built, without
+the LP backends, the tests, the demos and the tools.
+
+    ablemon/mk-ppa-source noble resolute --upload
+
+builds it for both series and uploads it, before the first upload of SMS++
+that depends on `ablemon-dev`. A new release of abLEMON is `ABLEMON_VERSION`
+in that script, and a new SONAME the name of the library package in
+`ablemon/debian/control` and of its `.install` file.

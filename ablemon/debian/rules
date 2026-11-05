@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+include /usr/share/dpkg/pkg-info.mk
+
+%:
+	dh $@ --buildsystem=cmake
+
+# the version is told to the build, which would otherwise ask git or
+# Mercurial, and the library alone is built: no LP backend, which would make
+# the package depend on it, and no tests, demos, tools or documentation
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		-DLEMON_VERSION=$(DEB_VERSION_UPSTREAM) \
+		-DBUILD_SHARED_LIBS=ON \
+		-DLEMON_ENABLE_GLPK=NO -DLEMON_ENABLE_ILOG=NO \
+		-DLEMON_ENABLE_COIN=NO -DLEMON_ENABLE_SOPLEX=NO \
+		-DLEMON_BUILD_TESTS=OFF -DLEMON_BUILD_DEMOS=OFF \
+		-DLEMON_BUILD_TOOLS=OFF -DLEMON_BUILD_DOC=OFF
