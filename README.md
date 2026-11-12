@@ -96,7 +96,7 @@ that depends on `libqpoases-dev`.
 abLEMON, the maintained fork of LEMON that `MCFLemonSolver` needs, is in no
 Ubuntu series, whose `liblemon-dev` is the LEMON of COIN-OR; the PPA carries
 it the same way, out of the tag of its release and of `ablemon/debian`:
-`libablemon1.8` holds the shared library, whose SONAME is `libemon.so.1.8`,
+`libablemon1.9` holds the shared library, whose SONAME is `libemon.so.1.9`,
 and `ablemon-dev` the headers, the pkg-config file and the CMake
 configuration, which takes the place of `liblemon-dev`, since both install
 the headers in `/usr/include/lemon`. The library alone is built, without

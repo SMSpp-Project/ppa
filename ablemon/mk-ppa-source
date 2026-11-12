@@ -15,7 +15,7 @@
 # --------------------------------------------------------------------------- #
 set -euo pipefail
 
-VERSION=${ABLEMON_VERSION:-1.8.1}
+VERSION=${ABLEMON_VERSION:-1.9.0}
 PPA=${SMSPP_PPA:-ppa:smspp-project/smspp}
 REVISION=${ABLEMON_REVISION:-1}
 # a second upload of the same revision to the PPA only bumps this, and then
