@@ -140,7 +140,7 @@ LIBS = [
      "The Solver of a min-cost flow Block by the algorithms of the MCFClass\n"
      "library, which it bundles: network simplex, relaxation, cost scaling."),
     ("MCFLemonSolver", "libsmspp-mcflemon", ["libsmspp-mcf"],
-     ["ablemon-dev (>= 1.8.0)"],
+     ["ablemon-dev (>= 1.9.0)"],
      "LEMON Solvers for SMS++",
      "The Solver of a min-cost flow Block by the algorithms of abLEMON, the\n"
      "maintained fork of the LEMON library."),
@@ -235,7 +235,7 @@ BUILD_DEPS = [
     "libeigen3-dev", "libnetcdf-c++4-dev",
     "libhighs-dev", "libdaqp-dev", "libqpoases-dev", "libstopt-dev",
     "libgeners-dev", "libbz2-dev",
-    "zlib1g-dev", "ablemon-dev (>= 1.8.0)", "libsvm-dev",
+    "zlib1g-dev", "ablemon-dev (>= 1.9.0)", "libsvm-dev",
     "liblinear-dev", "libcadical-dev", "mpi-default-dev",
 ]
 

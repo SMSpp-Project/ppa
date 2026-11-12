@@ -16,7 +16,7 @@ after the release of the umbrella whose packages it built.
   LEMON that `MCFLemonSolver` needs, which no Ubuntu series carries:
   `libablemon1.9` and `ablemon-dev`, built for the series of the PPA by
   `ablemon/mk-ppa-source`; `libsmspp-mcflemon-dev` and the build of the
-  umbrella depend on `ablemon-dev (>= 1.8.0)` in place of `liblemon-dev`
+  umbrella depend on `ablemon-dev (>= 1.9.0)` in place of `liblemon-dev`
 
 - `libsmspp-hqp`, the package of the new module `HQPBlock` (the Block and
   the Solver of hierarchical quadratic programs), depending on `libsmspp`
